@@ -72,6 +72,8 @@ class UIManager:
             # 创建 QQuickWidget，加载 QML 界面
             self.qml_widget = QQuickWidget(self.window)
             self.qml_widget.setResizeMode(QQuickWidget.SizeRootObjectToView)
+            self.qml_widget.setMinimumHeight(80)   # 设置最小高度
+            self.qml_widget.setMaximumHeight(100)  # 设置最大高度
             
             # 设置QML源文件路径
             qml_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ui", "main.qml")
@@ -89,8 +91,16 @@ class UIManager:
             # 加载QML文件
             self.qml_widget.setSource(QUrl.fromLocalFile(qml_path))
             
+            # 检查QML加载状态
+            if self.qml_widget.status() == QQuickWidget.Error:
+                print(f"[ERROR] QML加载错误: {self.qml_widget.errors()}")
+                self._create_fallback_interface(layout)
+                return
+            
             layout.addWidget(self.qml_widget)
-            print("QML界面创建完成")
+            print(f"QML界面创建完成，状态: {self.qml_widget.status()}")
+            print(f"QML文件路径: {qml_path}")
+            print(f"QML文件存在: {os.path.exists(qml_path)}")
             
         except Exception as e:
             print(f"[ERROR] 创建QML界面失败: {e}")

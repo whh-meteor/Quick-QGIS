@@ -1,15 +1,14 @@
 import QtQuick 2.15
 
 Item {
-    width: 800
-    height: 300
+    anchors.fill: parent
 
     Rectangle {
         id: header
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        height: 56
+        height: 80
         color: "#f5f5f5"
         border.color: "#cccccc"
         border.width: 1
