@@ -4,9 +4,11 @@ UI管理模块 - 负责主窗口和QML界面的创建
 """
 
 import os
-from qgis.PyQt.QtWidgets import QWidget, QVBoxLayout, QLabel
+from qgis.PyQt.QtWidgets import QWidget, QVBoxLayout
 
+from PyQt5.QtQuick import QQuickView, QQuickWindow
 from PyQt5.QtQuickWidgets import QQuickWidget
+from PyQt5.QtCore import Qt
 QML_AVAILABLE = True
  
 from qgis.PyQt.QtCore import QUrl
@@ -22,7 +24,9 @@ class UIManager:
         self.window = None
         self.canvas = None
         self.bridge = None
-        self.qml_widget = None
+        self.qml_view = None
+        self.qml_container = None
+        self.qml_overlay = None
     
     def create_main_window(self):
         """创建主窗口和地图画布"""
@@ -37,14 +41,11 @@ class UIManager:
         # 创建垂直布局
         layout = QVBoxLayout(self.window)
         
-        # 创建QML界面
-        self._create_qml_interface(layout)
-        
         # 创建地图画布
         self._create_map_canvas(layout)
-        
-        # 添加状态标签
-        self._create_status_label(layout)
+
+        # 在地图之上创建QML控制叠加层
+        self._create_qml_overlay()
         
         # 显示窗口
         self.window.show()
@@ -57,82 +58,43 @@ class UIManager:
     def _create_qml_interface(self, layout):
         """创建QML界面"""
         if not QML_AVAILABLE:
-            print("[INFO] QML不可用，使用备用界面")
-            self._create_fallback_interface(layout)
+            print("[INFO] QML不可用，请启用QML环境后重试")
             return
             
         try:
-            # 创建 QQuickWidget，加载 QML 界面
-            self.qml_widget = QQuickWidget(self.window)
-            self.qml_widget.setResizeMode(QQuickWidget.SizeRootObjectToView)
-            self.qml_widget.setMinimumHeight(80)   # 设置最小高度
-            self.qml_widget.setMaximumHeight(100)  # 设置最大高度
-            
+            # QQuickView + createWindowContainer 更稳定，避免与OpenGL原生窗口的堆叠问题
+            self.qml_view = QQuickView()
+            # 创建桥接对象并暴露给QML
+            self.bridge = QmlBridge(self.app_ref)
+            self.qml_view.rootContext().setContextProperty("qgisBridge", self.bridge)
+
             # 设置QML源文件路径
             qml_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ui", "main.qml")
-            
-            # 检查QML文件是否存在
             if not os.path.exists(qml_path):
-                print(f"[WARN] QML文件不存在: {qml_path}")
-                self._create_fallback_interface(layout)
+                print(f"[ERROR] QML文件不存在: {qml_path}")
                 return
-            
-            # 创建桥接对象
-            self.bridge = QmlBridge(self.app_ref)
-            #setContextProperty：将Python对象暴露给QML
-            self.qml_widget.engine().rootContext().setContextProperty("qgisBridge", self.bridge)
-            
-            # 加载QML文件
-            self.qml_widget.setSource(QUrl.fromLocalFile(qml_path))
-            
-            # 检查QML加载状态
-            if self.qml_widget.status() == QQuickWidget.Error:
-                print(f"[ERROR] QML加载错误: {self.qml_widget.errors()}")
-                self._create_fallback_interface(layout)
+
+            self.qml_view.setSource(QUrl.fromLocalFile(qml_path))
+
+            if self.qml_view.status() == QQuickView.Error:
+                print(f"[ERROR] QML加载错误: {self.qml_view.errors()}")
                 return
-            
-            layout.addWidget(self.qml_widget)
-            print(f"QML界面创建完成，状态: {self.qml_widget.status()}")
+
+            # 将 QQuickView 包装为 QWidget 容器
+            from qgis.PyQt.QtWidgets import QWidget as QtWidget
+            self.qml_container = QtWidget.createWindowContainer(self.qml_view, self.window)
+            self.qml_container.setMinimumHeight(60)
+            self.qml_container.setMaximumHeight(60)
+            self.qml_container.setFocusPolicy(False)
+
+            layout.addWidget(self.qml_container)
+            print("QML界面创建完成 (QQuickView + createWindowContainer)")
             print(f"QML文件路径: {qml_path}")
-            print(f"QML文件存在: {os.path.exists(qml_path)}")
             
         except Exception as e:
             print(f"[ERROR] 创建QML界面失败: {e}")
-            # 如果QML加载失败，创建一个简单的按钮界面
-            self._create_fallback_interface(layout)
-    
-    def _create_fallback_interface(self, layout):
-        """创建备用界面（当QML加载失败时）"""
-        from qgis.PyQt.QtWidgets import QHBoxLayout, QPushButton
-        
-        # 创建水平布局容器
-        button_container = QWidget()
-        button_layout = QHBoxLayout(button_container)
-        
-        # 创建按钮
-        osm_btn = QPushButton("OSM")
-        gaode_btn = QPushButton("高德")
-        arcgis_btn = QPushButton("ArcGIS")
-        refresh_btn = QPushButton("刷新")
-        reset_btn = QPushButton("重置")
-        
-        # 连接信号
-        osm_btn.clicked.connect(lambda: self.app_ref.load_basemap_by("OSM"))
-        gaode_btn.clicked.connect(lambda: self.app_ref.load_basemap_by("GAODE"))
-        arcgis_btn.clicked.connect(lambda: self.app_ref.load_basemap_by("ARCGIS"))
-        refresh_btn.clicked.connect(lambda: self.app_ref.refresh_canvas())
-        reset_btn.clicked.connect(lambda: self.app_ref.reset_canvas_extent())
-        
-        # 添加到布局
-        button_layout.addWidget(osm_btn)
-        button_layout.addWidget(gaode_btn)
-        button_layout.addWidget(arcgis_btn)
-        button_layout.addWidget(refresh_btn)
-        button_layout.addWidget(reset_btn)
-        button_layout.addStretch()
-        
-        layout.addWidget(button_container)
-        print("备用界面创建完成")
+            # 不再创建备用界面，保持纯QML控制
+            return
     
     def _create_map_canvas(self, layout):
         """创建地图画布"""
@@ -145,21 +107,78 @@ class UIManager:
         except Exception as e:
             print(f"[ERROR] 创建地图画布失败: {e}")
             self.canvas = None
-    
-    def _create_status_label(self, layout):
-        """创建状态标签"""
+
+    def _create_qml_overlay(self):
+        """创建叠加在地图上的QML控制层"""
         try:
-            self.status_label = QLabel("正在加载地图...")
-            layout.addWidget(self.status_label)
-            print("状态标签创建完成")
-            
+            if self.canvas is None:
+                return
+
+            # 使用 QQuickWidget 作为透明叠加层
+            # 启用默认 Alpha 缓冲，保证透明像素不会被黑底替代
+            try:
+                QQuickWindow.setDefaultAlphaBuffer(True)
+            except Exception:
+                pass
+            self.qml_overlay = QQuickWidget(self.window)
+            self.qml_overlay.setResizeMode(QQuickWidget.SizeRootObjectToView)
+            self.qml_overlay.setAttribute(Qt.WA_TranslucentBackground)
+            self.qml_overlay.setClearColor(Qt.transparent)
+            # 避免被其他子部件覆盖，同时确保自身背景不绘制
+            self.qml_overlay.setAttribute(Qt.WA_AlwaysStackOnTop)
+            try:
+                self.qml_overlay.setStyleSheet("background: transparent;")
+            except Exception:
+                pass
+
+            # 桥接对象（与应用共享）
+            if self.bridge is None:
+                self.bridge = QmlBridge(self.app_ref)
+            self.qml_overlay.rootContext().setContextProperty("qgisBridge", self.bridge)
+
+            # 作为画布子组件并置顶
+            self.qml_overlay.setParent(self.canvas)
+            self.qml_overlay.raise_()
+
+            # 加载 QML（顶部控制条）
+            qml_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ui", "main.qml")
+            if not os.path.exists(qml_path):
+                print(f"[WARN] 叠加QML文件不存在: {qml_path}")
+                return
+            self.qml_overlay.setSource(QUrl.fromLocalFile(qml_path))
+
+            # 同步几何尺寸到画布顶部 60 像素
+            def _sync_overlay_geometry():
+                if self.canvas and self.qml_overlay:
+                    self.qml_overlay.setGeometry(0, 0, self.canvas.width(), 60)
+                    self.qml_overlay.raise_()
+
+            _sync_overlay_geometry()
+
+            # 监听画布尺寸变化
+            original_resize = getattr(self.canvas, 'resizeEvent', None)
+
+            def wrapped_resize(event):
+                try:
+                    if callable(original_resize):
+                        original_resize(event)
+                finally:
+                    _sync_overlay_geometry()
+
+            self.canvas.resizeEvent = wrapped_resize
+
+            print("QML叠加控制层创建完成，位于地图之上")
+
         except Exception as e:
-            print(f"[ERROR] 创建状态标签失败: {e}")
+            print(f"[ERROR] 创建QML叠加层失败: {e}")
     
     def update_status(self, message: str):
-        """更新状态信息"""
-        if hasattr(self, 'status_label') and self.status_label:
-            self.status_label.setText(message)
+        """更新状态信息：通过桥接发射信号到QML"""
+        if self.bridge:
+            try:
+                self.bridge.updateStatus(message)
+            except Exception as e:
+                print(f"[WARN] 状态更新失败: {e}")
     
     def refresh_canvas(self):
         """刷新画布"""

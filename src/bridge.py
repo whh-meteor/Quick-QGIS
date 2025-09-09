@@ -4,12 +4,15 @@ QML桥接对象 - 供QML调用的Python接口
 """
 
 
-from qgis.PyQt.QtCore import QObject, pyqtSlot
+from qgis.PyQt.QtCore import QObject, pyqtSlot, pyqtSignal
 
 
 class QmlBridge(QObject):
     """供 QML 调用的桥接对象"""
     
+    # 供QML绑定的状态信号
+    statusChanged = pyqtSignal(str)
+
     def __init__(self, app_ref):
         super().__init__()
         self._app = app_ref
@@ -31,3 +34,8 @@ class QmlBridge(QObject):
         """重置视图"""
         if self._app:
             self._app.reset_canvas_extent()
+
+    @pyqtSlot(str)
+    def updateStatus(self, message):
+        """由Python调用，通知QML状态变化"""
+        self.statusChanged.emit(message)
