@@ -27,7 +27,8 @@ class UIManager:
     def create_main_window(self):
         """创建主窗口和地图画布"""
         print("正在创建主窗口...")
-        
+        # 显示启动画面
+        self._show_splash_screen()
         # 创建主窗口
         self.window = QWidget()
         self.window.setWindowTitle(DEFAULT_WINDOW_TITLE)
@@ -47,6 +48,8 @@ class UIManager:
         
         # 显示窗口
         self.window.show()
+        # 立即关闭启动画面
+        self.close_splash_screen()
         
         print("主窗口创建完成")
         return self.window, self.canvas
@@ -166,3 +169,86 @@ class UIManager:
     def get_bridge(self):
         """获取桥接对象"""
         return self.bridge
+    def _show_splash_screen(self):
+        """显示启动画面"""
+        try:
+            from PyQt5.QtWidgets import QSplashScreen
+            from PyQt5.QtGui import QPixmap, QPainter, QFont, QColor
+            from PyQt5.QtCore import Qt, QTimer
+            import os
+            
+            # 获取背景图片路径
+            background_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 
+                                         "assets", "images", "first-screen.png")
+            
+            # 创建启动画面
+            splash_pixmap = QPixmap(800, 600)  # 增大尺寸以匹配QGIS风格
+            
+            # 尝试加载背景图片
+            if os.path.exists(background_path):
+                background_pixmap = QPixmap(background_path)
+                if not background_pixmap.isNull():
+                    # 缩放背景图片以填充启动画面
+                    scaled_background = background_pixmap.scaled(
+                        splash_pixmap.size(), 
+                        Qt.KeepAspectRatioByExpanding, 
+                        Qt.SmoothTransformation
+                    )
+                    # 将背景图片绘制到启动画面上
+                    painter = QPainter(splash_pixmap)
+                    painter.drawPixmap(0, 0, scaled_background)
+                else:
+                    # 如果图片加载失败，使用默认背景
+                    splash_pixmap.fill(QColor(0, 100, 0))  # 深绿色背景
+                    painter = QPainter(splash_pixmap)
+            else:
+                # 如果没有背景图片，使用默认背景
+                splash_pixmap.fill(QColor(0, 100, 0))  # 深绿色背景
+                painter = QPainter(splash_pixmap)
+            
+            painter.setRenderHint(QPainter.Antialiasing)
+            
+            # 添加半透明遮罩层，让文字更清晰
+            painter.fillRect(splash_pixmap.rect(), QColor(0, 0, 0, 100))
+            
+            # 绘制主标题 - 大号白色粗体
+            painter.setPen(QColor(255, 255, 255))
+            painter.setFont(QFont("Microsoft YaHei", 26, QFont.Bold))
+            main_title_rect = splash_pixmap.rect().adjusted(0, 150, 0, -200)
+            painter.drawText(main_title_rect, Qt.AlignCenter, 
+                           "海洋移动监测路径规划系统")
+            
+            # 绘制副标题 - 中等白色字体
+            painter.setFont(QFont("Microsoft YaHei", 18, QFont.Normal))
+            subtitle_rect = splash_pixmap.rect().adjusted(0, 220, 0, -150)
+            painter.drawText(subtitle_rect, Qt.AlignCenter, "v1.0.0")
+            
+            painter.end()
+            
+            # 创建启动画面
+            self.splash = QSplashScreen(splash_pixmap)
+            self.splash.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.SplashScreen)
+            self.splash.show()
+            
+            # 底部状态消息 - 白色文字
+            self.splash.showMessage("正在初始化系统...", Qt.AlignBottom | Qt.AlignCenter, 
+                                  QColor(255, 255, 255))
+            
+            print("启动画面显示成功")
+            
+
+        except Exception as e:
+            print(f"显示启动画面失败: {e}")
+            self.splash = None
+    
+    def close_splash_screen(self):
+        """关闭启动画面"""
+        try:
+            if hasattr(self, 'splash') and self.splash:
+                self.splash.close()
+                self.splash = None
+                print("启动画面已关闭")
+        except Exception as e:
+            print(f"关闭启动画面失败: {e}")
+    
+

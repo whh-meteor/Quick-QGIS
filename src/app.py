@@ -99,3 +99,4 @@ class QGISMapApp:
     def get_canvas(self):
         """获取地图画布"""
         return self.canvas
+    

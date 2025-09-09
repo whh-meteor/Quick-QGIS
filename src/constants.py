@@ -16,8 +16,8 @@ DEFAULT_WINDOW_TITLE = f"{APP_NAME} - {APP_VERSION}"
 # 地图设置
 DEFAULT_CRS = "EPSG:4326"  # WGS84坐标系统
 DEFAULT_EXTENT = {
-    "xmin": 110,
-    "ymin": 20,
+    "xmin": 125,
+    "ymin": 40,
     "xmax": 130,
     "ymax": 45
 }
@@ -30,11 +30,11 @@ BASEMAP_SOURCES = {
     },
     "GAODE": {
         "name": "高德街道图",
-        "url": "type=xyz&url=https://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}"
+        "url": "type=xyz&url=https://tiles.windy.com/tiles/v10.0/darkmap/{z}/{x}/{y}.png"
     },
     "ARCGIS": {
         "name": "ArcGIS中国地图",
-        "url": "type=xyz&url=https://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer/tile/{z}/{y}/{x}"
+        "url": "type=xyz&url=http://service.qdlimap.cn:9999/gisAssistant//wmts/grid_tile/mapbox/satellite/{z}/{y}/{x}"
     }
 }
 
