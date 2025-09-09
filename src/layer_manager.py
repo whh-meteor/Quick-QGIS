@@ -26,12 +26,26 @@ class LayerManager:
 
         src = BASEMAP_SOURCES[key]
         print(f"切换底图: {src['name']}")
+        print(f"底图URL: {src['url']}")
+
+        # 检查可用的数据提供者
+        from qgis.core import QgsProviderRegistry
+        providers = QgsProviderRegistry.instance().providerList()
+        print(f"可用的数据提供者: {providers}")
+        print(f"WMS提供者可用: {'wms' in providers}")
 
         try:
-            # 创建栅格图层
+            # 创建栅格图层 - 对于XYZ瓦片，使用gdal数据提供者
             layer = QgsRasterLayer(src['url'], src['name'], "wms")
+            print(f"图层创建状态: {layer.isValid()}")
+            print(f"图层错误信息: {layer.error().summary()}")
+            print(f"图层错误详情: {layer.error().message()}")
+            
             if not layer.isValid():
                 print(f"[FAIL] 底图加载失败: {src['name']}")
+                print(f"错误代码: {layer.error()}")
+                print(f"错误摘要: {layer.error().summary()}")
+                print(f"错误消息: {layer.error().message()}")
                 return False
 
             # 移除旧的底图图层
@@ -45,6 +59,8 @@ class LayerManager:
             
         except Exception as e:
             print(f"[ERROR] 切换底图出错: {e}")
+            import traceback
+            traceback.print_exc()
             return False
     
     def _remove_old_basemaps(self):
@@ -257,7 +273,7 @@ class LayerManager:
                 if hasattr(layer, 'extent'):
                     extent = layer.extent()
                     print(f"  范围: {extent.toString()}")
-                    print(f"  范围有效: {extent.isValid()}")
+                    print(f"  范围有效: {not extent.isNull() and not extent.isEmpty()}")
             
             # 检查画布状态
             print(f"画布大小: {self.canvas.size().width()} x {self.canvas.size().height()}")

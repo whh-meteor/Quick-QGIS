@@ -86,6 +86,7 @@ class UIManager:
             
             # 创建桥接对象
             self.bridge = QmlBridge(self.app_ref)
+            #setContextProperty：将Python对象暴露给QML
             self.qml_widget.engine().rootContext().setContextProperty("qgisBridge", self.bridge)
             
             # 加载QML文件

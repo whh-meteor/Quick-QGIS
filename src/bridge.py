@@ -17,7 +17,7 @@ class QmlBridge(QObject):
     def __init__(self, app_ref):
         super().__init__()
         self._app = app_ref
-
+    #@pyqtSlot：装饰器，标记方法可以被QML调用
     @pyqtSlot(str)
     def switchBasemap(self, key):
         """切换底图"""

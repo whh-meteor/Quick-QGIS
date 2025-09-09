@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 17.0.0, 2025-08-29T13:22:52. -->
+<!-- Written by QtCreator 17.0.0, 2025-08-29T18:03:51. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -149,14 +149,14 @@
      <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
      <value type="bool" key="PE.EnvironmentAspect.PrintOnRun">false</value>
      <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph &quot;dwarf,4096&quot; -F 250</value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py2</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.</value>
-     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">F:/Desktop/Quick-QGIS/main.py</value>
-     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
-     <value type="QString" key="PythonEditor.RunConfiguation.Script">F:\Desktop\Quick-QGIS\main.py</value>
+     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">F:/Desktop/QML/Quick-QGIS/main.py</value>
+     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
+     <value type="QString" key="PythonEditor.RunConfiguation.Script">F:\Desktop\QML\Quick-QGIS\main.py</value>
      <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
      <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-     <value type="QString" key="RunConfiguration.WorkingDirectory.default">F:/Desktop/Quick-QGIS</value>
+     <value type="QString" key="RunConfiguration.WorkingDirectory.default">F:/Desktop/QML/Quick-QGIS</value>
     </valuemap>
     <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
     <value type="QString" key="python">F:/Documents/withQGIS/.qtcreator/qgis_pyvenv/Scripts/python.exe</value>
@@ -214,14 +214,14 @@
      <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
      <value type="bool" key="PE.EnvironmentAspect.PrintOnRun">false</value>
      <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph &quot;dwarf,4096&quot; -F 250</value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py2</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.</value>
-     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">F:/Desktop/Quick-QGIS/main.py</value>
-     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
-     <value type="QString" key="PythonEditor.RunConfiguation.Script">F:\Desktop\Quick-QGIS\main.py</value>
+     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">F:/Desktop/QML/Quick-QGIS/main.py</value>
+     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
+     <value type="QString" key="PythonEditor.RunConfiguation.Script">F:\Desktop\QML\Quick-QGIS\main.py</value>
      <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
      <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-     <value type="QString" key="RunConfiguration.WorkingDirectory.default">F:/Desktop/Quick-QGIS</value>
+     <value type="QString" key="RunConfiguration.WorkingDirectory.default">F:/Desktop/QML/Quick-QGIS</value>
     </valuemap>
     <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
     <value type="QString" key="python">E:/Software/QGIS/apps/Python312/python3.exe</value>
@@ -250,14 +250,14 @@
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="bool" key="PE.EnvironmentAspect.PrintOnRun">false</value>
     <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph &quot;dwarf,4096&quot; -F 250</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py2</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">F:/Desktop/Quick-QGIS/main.py</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">F:\Desktop\Quick-QGIS\main.py</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">F:/Desktop/QML/Quick-QGIS/main.py</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">F:\Desktop\QML\Quick-QGIS\main.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">F:/Desktop/Quick-QGIS</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">F:/Desktop/QML/Quick-QGIS</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>
@@ -323,14 +323,14 @@
      <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
      <value type="bool" key="PE.EnvironmentAspect.PrintOnRun">false</value>
      <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph &quot;dwarf,4096&quot; -F 250</value>
-     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py</value>
+     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py2</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.</value>
-     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">F:/Desktop/Quick-QGIS/main.py</value>
-     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
-     <value type="QString" key="PythonEditor.RunConfiguation.Script">F:\Desktop\Quick-QGIS\main.py</value>
+     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">F:/Desktop/QML/Quick-QGIS/main.py</value>
+     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
+     <value type="QString" key="PythonEditor.RunConfiguation.Script">F:\Desktop\QML\Quick-QGIS\main.py</value>
      <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
      <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-     <value type="QString" key="RunConfiguration.WorkingDirectory.default">F:/Desktop/Quick-QGIS</value>
+     <value type="QString" key="RunConfiguration.WorkingDirectory.default">F:/Desktop/QML/Quick-QGIS</value>
     </valuemap>
     <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
     <value type="QString" key="python">F:/Documents/withQGIS/.qtcreator/Python_3_12_3venv/Scripts/python.exe</value>
@@ -360,14 +360,14 @@
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="bool" key="PE.EnvironmentAspect.PrintOnRun">false</value>
     <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph &quot;dwarf,4096&quot; -F 250</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">main.py2</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration.</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">F:/Desktop/Quick-QGIS/main.py</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Script">F:\Desktop\Quick-QGIS\main.py</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">F:/Desktop/QML/Quick-QGIS/main.py</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Script">F:\Desktop\QML\Quick-QGIS\main.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">F:/Desktop/Quick-QGIS</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">F:/Desktop/QML/Quick-QGIS</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>
