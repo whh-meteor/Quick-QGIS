@@ -91,6 +91,14 @@ class QGISMapApp:
         """重置画布范围（委托给图层管理器）"""
         if self.layer_manager:
             self.layer_manager.set_canvas_extent()
+
+    def zoom_in(self):
+        if self.layer_manager:
+            self.layer_manager.zoom_in()
+
+    def zoom_out(self):
+        if self.layer_manager:
+            self.layer_manager.zoom_out()
     
     def get_window(self):
         """获取主窗口"""

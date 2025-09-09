@@ -44,8 +44,10 @@ class UIManager:
         # 创建地图画布
         self._create_map_canvas(layout)
 
-        # 在地图之上创建QML控制叠加层
+        # 在地图之上创建顶部QML控制条
         self._create_qml_overlay()
+        # 在地图之上创建右下角工具栏
+        self._create_tools_overlay()
         
         # 显示窗口
         self.window.show()
@@ -147,7 +149,7 @@ class UIManager:
                 return
             self.qml_overlay.setSource(QUrl.fromLocalFile(qml_path))
 
-            # 同步几何尺寸到画布顶部 60 像素
+            # 顶部栏仅占用高度 60，避免拦截整个画布鼠标
             def _sync_overlay_geometry():
                 if self.canvas and self.qml_overlay:
                     self.qml_overlay.setGeometry(0, 0, self.canvas.width(), 60)
@@ -171,6 +173,69 @@ class UIManager:
 
         except Exception as e:
             print(f"[ERROR] 创建QML叠加层失败: {e}")
+
+    def _create_tools_overlay(self):
+        """创建右下角工具栏叠加层（独立的 QQuickWidget，避免遮挡画布）"""
+        try:
+            if self.canvas is None:
+                return
+
+            tools = QQuickWidget(self.window)
+            tools.setResizeMode(QQuickWidget.SizeRootObjectToView)
+            tools.setAttribute(Qt.WA_TranslucentBackground)
+            tools.setClearColor(Qt.transparent)
+            tools.setAttribute(Qt.WA_AlwaysStackOnTop)
+            tools.setStyleSheet("background: transparent;")
+
+            # 与主桥接对象共享上下文
+            if self.bridge is None:
+                self.bridge = QmlBridge(self.app_ref)
+            tools.rootContext().setContextProperty("qgisBridge", self.bridge)
+
+            tools.setParent(self.canvas)
+            tools.raise_()
+
+            qml_tools = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ui", "tools.qml")
+            if not os.path.exists(qml_tools):
+                print(f"[WARN] 工具栏QML不存在: {qml_tools}")
+                return
+            tools.setSource(QUrl.fromLocalFile(qml_tools))
+
+            TOOLBAR_W = 56
+            TOOLBAR_H = 314  # 6*44 + 5*10
+            MARGIN = 16
+
+            def _sync_tools_geometry():
+                if self.canvas and tools:
+                    x = max(0, self.canvas.width() - TOOLBAR_W - MARGIN)
+                    y = max(0, self.canvas.height() - TOOLBAR_H - MARGIN)
+                    tools.setGeometry(x, y, TOOLBAR_W, TOOLBAR_H)
+                    tools.raise_()
+
+            _sync_tools_geometry()
+
+            original_resize = getattr(self.canvas, 'resizeEvent', None)
+
+            def wrapped_resize_tools(event):
+                try:
+                    if callable(original_resize):
+                        original_resize(event)
+                finally:
+                    # 顶部栏
+                    if hasattr(self, 'qml_overlay'):
+                        try:
+                            self.qml_overlay.setGeometry(0, 0, self.canvas.width(), 60)
+                        except Exception:
+                            pass
+                    _sync_tools_geometry()
+
+            self.canvas.resizeEvent = wrapped_resize_tools
+
+            self.tools_overlay = tools
+            print("右下角工具栏叠加层创建完成")
+
+        except Exception as e:
+            print(f"[ERROR] 创建工具栏叠加层失败: {e}")
     
     def update_status(self, message: str):
         """更新状态信息：通过桥接发射信号到QML"""

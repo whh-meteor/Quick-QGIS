@@ -34,6 +34,12 @@ class LayerManager:
     def refresh_canvas(self):
         """刷新画布（委托给地图引擎）"""
         self.map_engine.refresh()
+
+    def zoom_in(self):
+        self.map_engine.zoom_in()
+
+    def zoom_out(self):
+        self.map_engine.zoom_out()
     
     def get_available_basemaps(self):
         """获取可用的底图列表"""
@@ -48,23 +54,23 @@ class LayerManager:
         print("\n=== 画布调试信息 ===")
         try:
             layers = self.canvas.layers()
-            print(f"画布图层数量: {len(layers)}")
+            # print(f"画布图层数量: {len(layers)}")
             
             for i, layer in enumerate(layers):
-                print(f"图层 {i+1}: {layer.name()}")
-                print(f"  类型: {layer.type()}")
-                print(f"  有效: {layer.isValid()}")
+                # print(f"图层 {i+1}: {layer.name()}")
+                # print(f"  类型: {layer.type()}")
+                # print(f"  有效: {layer.isValid()}")
                 if hasattr(layer, 'extent'):
                     extent = layer.extent()
-                    print(f"  范围: {extent.toString()}")
-                    print(f"  范围有效: {not extent.isNull() and not extent.isEmpty()}")
+                    # print(f"  范围: {extent.toString()}")
+                    # print(f"  范围有效: {not extent.isNull() and not extent.isEmpty()}")
             
             # 检查画布状态
-            print(f"画布大小: {self.canvas.size().width()} x {self.canvas.size().height()}")
+            # print(f"画布大小: {self.canvas.size().width()} x {self.canvas.size().height()}")
             
             # 检查坐标系统
             crs = self.canvas.mapSettings().destinationCrs()
-            print(f"画布坐标系统: {crs.description()}")
+            # print(f"画布坐标系统: {crs.description()}")
             
         except Exception as e:
             print(f"调试信息获取失败: {e}")

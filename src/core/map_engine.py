@@ -45,3 +45,41 @@ class MapEngine:
     def get_canvas(self):
         """获取地图画布"""
         return self.canvas
+
+    def zoom_in(self, factor: float = 1.5):
+        """按比例放大视图（factor>1 放大）"""
+        try:
+            extent = self.canvas.extent()
+            center = extent.center()
+            new_width = extent.width() / factor
+            new_height = extent.height() / factor
+            from qgis.core import QgsRectangle
+            new_extent = QgsRectangle(
+                center.x() - new_width / 2.0,
+                center.y() - new_height / 2.0,
+                center.x() + new_width / 2.0,
+                center.y() + new_height / 2.0,
+            )
+            self.canvas.setExtent(new_extent)
+            self.canvas.refresh()
+        except Exception as e:
+            print(f"[WARN] 放大失败: {e}")
+
+    def zoom_out(self, factor: float = 1.5):
+        """按比例缩小视图（factor>1 缩小）"""
+        try:
+            extent = self.canvas.extent()
+            center = extent.center()
+            new_width = extent.width() * factor
+            new_height = extent.height() * factor
+            from qgis.core import QgsRectangle
+            new_extent = QgsRectangle(
+                center.x() - new_width / 2.0,
+                center.y() - new_height / 2.0,
+                center.x() + new_width / 2.0,
+                center.y() + new_height / 2.0,
+            )
+            self.canvas.setExtent(new_extent)
+            self.canvas.refresh()
+        except Exception as e:
+            print(f"[WARN] 缩小失败: {e}")

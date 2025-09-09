@@ -39,3 +39,30 @@ class QmlBridge(QObject):
     def updateStatus(self, message):
         """由Python调用，通知QML状态变化"""
         self.statusChanged.emit(message)
+
+    # 视图控制：提供给 QML 调用
+    @pyqtSlot()
+    def zoomIn(self):
+        if self._app:
+            self._app.zoom_in()
+
+    @pyqtSlot()
+    def zoomOut(self):
+        if self._app:
+            self._app.zoom_out()
+
+    @pyqtSlot()
+    def clearCanvas(self):
+        """清屏：仅刷新（如需清除图层，可扩展）"""
+        if self._app and self._app.layer_manager:
+            # 这里先简单刷新，如需真正移除图层可在 layer_manager 增加清理函数
+            self._app.refresh_canvas()
+
+    @pyqtSlot()
+    def toggleFullscreen(self):
+        if self._app and self._app.get_window():
+            w = self._app.get_window()
+            if w.isFullScreen():
+                w.showNormal()
+            else:
+                w.showFullScreen()
