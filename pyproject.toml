@@ -1,5 +1,37 @@
 [project]
-name = "PySide QtQuick Project"
+name = "quick-qgis"
+version = "2.0.0"
+description = "基于QGIS的快速地图显示应用程序"
+authors = [
+    {name = "Quick-QGIS Team", email = "team@quickqgis.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.7"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: GIS",
+]
 
-[tool.pyside6-project]
-files = ["main.py", "main.qml"]
+[project.scripts]
+quick-qgis = "main:main"
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.qml", "*.qgs", "*.qgz"]

@@ -3,13 +3,9 @@
 QML桥接对象 - 供QML调用的Python接口
 """
 
-try:
-    from qgis.PyQt.QtCore import QObject, pyqtSlot
-except ImportError:
-    try:
-        from PyQt5.QtCore import QObject, pyqtSlot
-    except ImportError:
-        from PyQt6.QtCore import QObject, pyqtSlot
+
+from qgis.PyQt.QtCore import QObject, pyqtSlot
+
 
 class QmlBridge(QObject):
     """供 QML 调用的桥接对象"""

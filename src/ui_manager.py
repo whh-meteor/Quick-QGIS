@@ -5,24 +5,14 @@ UI管理模块 - 负责主窗口和QML界面的创建
 
 import os
 from qgis.PyQt.QtWidgets import QWidget, QVBoxLayout, QLabel
-try:
-    from qgis.PyQt.QtQuickWidgets import QQuickWidget
-    QML_AVAILABLE = True
-except ImportError:
-    try:
-        from PyQt5.QtQuickWidgets import QQuickWidget
-        QML_AVAILABLE = True
-    except ImportError:
-        try:
-            from PyQt6.QtQuickWidgets import QQuickWidget
-            QML_AVAILABLE = True
-        except ImportError:
-            QML_AVAILABLE = False
-            print("[WARN] QQuickWidget不可用，将使用备用界面")
 
+from PyQt5.QtQuickWidgets import QQuickWidget
+QML_AVAILABLE = True
+ 
 from qgis.PyQt.QtCore import QUrl
 from qgis.gui import QgsMapCanvas
 from .bridge import QmlBridge
+from .constants import DEFAULT_WINDOW_TITLE
 
 class UIManager:
     """UI管理器"""
@@ -40,7 +30,7 @@ class UIManager:
         
         # 创建主窗口
         self.window = QWidget()
-        self.window.setWindowTitle("QGIS地图显示 - 重构版")
+        self.window.setWindowTitle(DEFAULT_WINDOW_TITLE)
         self.window.resize(1000, 700)
         
         # 创建垂直布局

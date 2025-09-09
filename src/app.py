@@ -6,6 +6,7 @@
 from qgis.core import QgsCoordinateReferenceSystem
 from .ui_manager import UIManager
 from .layer_manager import LayerManager
+from .constants import DEFAULT_CRS, DEFAULT_WINDOW_TITLE
 
 class QGISMapApp:
     """QGIS地图应用程序主类"""
@@ -48,10 +49,10 @@ class QGISMapApp:
             print("错误：画布未初始化")
             return
             
-        # 设置画布的坐标系统为WGS84（与矢量数据匹配）
-        crs = QgsCoordinateReferenceSystem("EPSG:4326")
+        # 设置画布的坐标系统（与矢量数据匹配）
+        crs = QgsCoordinateReferenceSystem(DEFAULT_CRS)
         self.canvas.setDestinationCrs(crs)
-        print("坐标系统设置为 EPSG:4326")
+        print(f"坐标系统设置为 {DEFAULT_CRS}")
         
         # 添加示例矢量数据
         self.layer_manager.add_sample_vector_data()
@@ -82,9 +83,9 @@ class QGISMapApp:
         return False
     
     def refresh_canvas(self):
-        """刷新画布（委托给UI管理器）"""
-        if self.ui_manager:
-            self.ui_manager.refresh_canvas()
+        """刷新画布（委托给图层管理器）"""
+        if self.layer_manager:
+            self.layer_manager.refresh_canvas()
     
     def reset_canvas_extent(self):
         """重置画布范围（委托给图层管理器）"""
